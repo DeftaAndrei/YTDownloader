@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>YouTube Downloader</title>
+    <link rel="icon" type="image/jpeg" href="logo.jpeg">
+    <style>
+        html {
+            white-space: normal;
+        }
+        body {
+            background: url('Background.jpg') no-repeat center center fixed;
+            background-size: cover;
+            color: #ffffff;
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            flex-direction: column;
+            overflow: hidden;
+        }
+        .container {
+            background-color: rgba(58, 58, 58, 0.9);
+            padding: 60px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            max-width: 1200px;
+            width: 100%;
+            position: relative;
+            animation: fadeIn 1.5s ease-in-out;
+            text-align: center;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        h2 {
+            font-size: 3em;
+            color: #66b2ff;
+            text-align: center;
+        }
+        .form-label {
+            color: #b0c4de;
+        }
+        .form-control, .form-select {
+            background-color: #4a4a4a;
+            color: #ffffff;
+            border: 1px solid #66b2ff;
+        }
+        .form-control:focus, .form-select:focus {
+            border-color: #99ccff;
+            box-shadow: 0 0 5px #99ccff;
+        }
+        .btn-primary {
+            background-color: #66b2ff;
+            border: none;
+            width: 100%;
+            animation: pulse 1.5s infinite;
+        }
+        .btn-primary:hover {
+            background-color: #99ccff;
+        }
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+    </style>
+    <script>
+        function downloadMedia() {
+            const url = document.getElementById("url").value;
+            const type = document.getElementById("type").value;
+            
+            if (!url) {
+                alert("Please enter a valid YouTube URL.");
+                return;
+            }
+            
+            fetch('/download', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ url: url, type: type })
+            })
+            .then(response => response.json())
+            .then(data => {
+                alert(data.message);
+            })
+            .catch(error => console.error('Error:', error));
+        }
+    </script>
+</head>
+<body>
+    <div class="container">
+        <h2>YouTube Downloader</h2>
+        <div class="mb-3">
+            <label for="url" class="form-label">Enter the URL:</label>
+            <input type="text" id="url" class="form-control" required>
+        </div>
+        <div class="mb-3">
+            <label for="type" class="form-label">Download Type:</label>
+            <select id="type" class="form-select">
+                <option value="video">Video</option>
+                <option value="audio">Audio</option>
+            </select>
+        </div>
+        <button onclick="downloadMedia()" class="btn btn-primary">Download</button>
+    </div>
+</body>
+</html>
